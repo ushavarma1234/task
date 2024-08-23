@@ -17,7 +17,7 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { setUser } = useUser(); // Use context to set user
+  const { setUser } = useUser(); 
 
   const validate = (name, value) => {
     const newErrors = { ...errors };
@@ -58,10 +58,9 @@ const Register = () => {
         const response = await axios.post('http://localhost:5000/api/auth/register', formData);
         console.log('Registration successful:', response.data);
 
-        // Store user data in UserContext
-        setUser(response.data); // Update context with user data
+        setUser(response.data);
 
-        // Show SweetAlert2 message
+  
         Swal.fire({
           title: 'Welcome!',
           text: `Hello, ${formData.fullName}. Your registration was successful!`,

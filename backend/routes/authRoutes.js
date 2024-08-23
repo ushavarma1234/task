@@ -1,18 +1,18 @@
 const express = require('express');
-const router = express.Router(); // Ensure router is defined
+const router = express.Router(); 
 const {
   register,
   login,
   getAllUsers,
   getUserById,
-  editUserById // Import the new controller function
-} = require('../controllers/authController'); // Ensure correct path to authController
+  editUserById 
+} = require('../controllers/authController'); 
 
-// Define routes
+
 router.post('/register', register);
 router.post('/login', login);
 router.get('/users', getAllUsers);
 router.get('/users/:id', getUserById);
-router.patch('/users/:id', editUserById); // Correct endpoint for partial updates
+router.patch('/users/:id', editUserById); 
 
 module.exports = router;

@@ -3,32 +3,56 @@ import { useUser } from '../../context/UserContext';
 import { TextField, Button, Typography, Avatar, Container, Grid, Box, Paper } from '@mui/material';
 
 const Profile = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
-  // State for managing edit mode and form data
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
+    id: user?.id || '', 
     fullName: user?.fullName || '',
     email: user?.email || '',
     phoneNumber: user?.phoneNumber || '',
     gender: user?.gender || '',
   });
 
-  // Handle edit click
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  // Handle save click
-  const handleSaveClick = () => {
-    // Logic to save the updated user data goes here (e.g., API call)
-    setIsEditing(false);
+  const handleSaveClick = async () => {
+    if (!user?.id) { 
+      alert('User ID is not available.');
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/auth/users/${user.id}`, { 
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response data:', errorData);
+        throw new Error(`Failed to update user: ${errorData.message}`);
+      }
+  
+      const updatedUser = await response.json();
+      setUser(updatedUser); 
+      setIsEditing(false);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating user:', error);
+      alert(`An error occurred while saving your profile: ${error.message}`);
+    }
   };
 
-  // Handle cancel click
   const handleCancelClick = () => {
     setIsEditing(false);
     setFormData({
+      id: user?.id || '',
       fullName: user?.fullName || '',
       email: user?.email || '',
       phoneNumber: user?.phoneNumber || '',
@@ -36,7 +60,6 @@ const Profile = () => {
     });
   };
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -59,6 +82,9 @@ const Profile = () => {
           <Paper elevation={3} style={{ padding: '20px', width: '100%' }}>
             {isEditing ? (
               <Box component="form" noValidate autoComplete="off">
+                <Grid item>
+                  <Typography variant="body1">User ID: {formData.id}</Typography>
+                </Grid>
                 <TextField
                   label="Full Name"
                   name="fullName"
@@ -116,13 +142,13 @@ const Profile = () => {
                 </Button>
               </Box>
             ) : (
-              <Box style={{ textAlign: 'center' }}>
-                <Typography variant="h6">Name: {user?.fullName}</Typography>
+              <Box>
+                <Typography variant="body1">User ID: {user?.id}</Typography>
+                <Typography variant="body1">Full Name: {user?.fullName}</Typography>
                 <Typography variant="body1">Email: {user?.email}</Typography>
                 <Typography variant="body1">Phone Number: {user?.phoneNumber}</Typography>
                 <Typography variant="body1">Gender: {user?.gender}</Typography>
                 <Button
-                  type="button"
                   variant="contained"
                   color="primary"
                   style={{ marginTop: '20px' }}

@@ -13,7 +13,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useUser(); // Use context
 
-  // Validation function
   const validate = (name, value) => {
     const newErrors = { ...errors };
 
@@ -31,44 +30,45 @@ const Login = () => {
     setErrors(newErrors);
   };
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     validate(name, value);
   };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check for validation errors
+  
     if (Object.keys(errors).every(key => !errors[key])) {
       try {
         setLoading(true);
-
-        // Send login request
+  
         const response = await axios.post('http://localhost:5000/api/auth/login', formData, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
-
-        // Destructure token and user data from response
+  
+        // Log the entire response object
+        console.log('Response data:', response.data);
+  
         const { token, id, fullName, email, phoneNumber, gender } = response.data;
-
+  
+        // Log the ID to the console
+        console.log('User ID from response:', id);
+  
         if (token) {
-          localStorage.setItem('token', token); // Store token in local storage
-          setUser({ id, fullName, email, phoneNumber, gender }); // Set user data in context
-
-          // Show success message
+          localStorage.setItem('token', token);
+          localStorage.setItem('id', id);
+  
+          setUser({ id, fullName, email, phoneNumber, gender });
+  
           Swal.fire({
             title: 'Welcome!',
             text: 'Your login was successful!',
             icon: 'success',
             confirmButtonText: 'OK'
           }).then(() => {
-            navigate('/profile'); // Navigate to profile page
+            navigate('/profile');
           });
         } else {
           setErrorMessage('Token or user data is missing.');
@@ -81,6 +81,7 @@ const Login = () => {
       }
     }
   };
+  
 
   return (
     <div className="login-container">

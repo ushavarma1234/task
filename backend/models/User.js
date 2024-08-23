@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 const db = require('../config/db');
 
-// Function to add a new user
+
 const createUser = async (userData) => {
   const { fullName, email, phoneNumber, password, gender } = userData;
   try {
@@ -15,7 +15,6 @@ const createUser = async (userData) => {
   }
 };
 
-// Function to get user by email
 const getUserByEmail = async (email) => {
   try {
     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -70,7 +69,6 @@ const updateUserById = async (id, updates) => {
 };
 
 
-// Exporting functions
 module.exports = {
   createUser,
   getUserByEmail,

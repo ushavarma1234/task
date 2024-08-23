@@ -127,9 +127,7 @@ h2 {
   font-size: 14px;
   margin-top: 5px;
 }
-/* App.css */
 
-/* Container for the login page */
 .login-container {
   display: flex;
   justify-content: center;
@@ -139,7 +137,7 @@ h2 {
   padding: 0 20px;
 }
 
-/* Form wrapper */
+
 .login-form {
   background: #fff;
   border-radius: 8px;
@@ -150,7 +148,6 @@ h2 {
   box-sizing: border-box;
 }
 
-/* Heading for the form */
 .login-form h2 {
   margin-bottom: 20px;
   font-size: 24px;
@@ -158,12 +155,11 @@ h2 {
   text-align: center;
 }
 
-/* Form group styling */
+
 .form-group {
   margin-bottom: 15px;
 }
 
-/* Label styling */
 .form-group label {
   display: block;
   font-size: 14px;
@@ -171,7 +167,7 @@ h2 {
   margin-bottom: 5px;
 }
 
-/* Input field styling */
+
 .form-group input {
   width: 100%;
   padding: 10px;
@@ -181,19 +177,17 @@ h2 {
   font-size: 14px;
 }
 
-/* Error state for inputs */
 .form-group input.error {
   border-color: #e74c3c;
 }
 
-/* Error message styling */
+
 .error-message {
   color: #e74c3c;
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Button styling */
 button {
   width: 100%;
   padding: 10px;
@@ -206,12 +200,12 @@ button {
   transition: background 0.3s ease;
 }
 
-/* Button hover effect */
+
 button:hover {
   background: #2980b9;
 }
 
-/* Button disabled state */
+
 button:disabled {
   background: #bdc3c7;
   cursor: not-allowed;

@@ -28,78 +28,10 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// Register user
-// Register user
-app.post('/api/register', async (req, res) => {
-  const { fullName, email, phoneNumber, password, gender } = req.body;
-  try {
-    // Hash the user's password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Create the user
-    const userId = await createUser({ fullName, email, phoneNumber, password: hashedPassword, gender });
-
-    // Generate a JWT token
-    const token = jwt.sign({ id: userId, email }, JWT_SECRET_KEY, { expiresIn: '1h' });
-
-    // Send the response with userId and token
-    res.status(201).json({ userId, token });
-  } catch (error) {
-    res.status(500).json({ message: 'Error registering user.' });
-  }
-});
 
 
 
-// Login user
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await getUserByEmail(email);
-    if (!user) return res.status(401).json({ message: 'Invalid email or password.' });
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ message: 'Invalid email or password.' });
-
-    const token = jwt.sign({ id: user.id }, JWT_SECRET_KEY, { expiresIn: '1h' });
-    res.json({ token, fullName: user.fullName }); // Include user's full name in the response
-  } catch (error) {
-    res.status(500).json({ message: 'Error logging in.' });
-  }
-});
-
-// Route to get user profile by ID
-app.get('/api/user/profile/:id', authenticateToken, async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const user = await getUserById(userId);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching user profile' });
-  }
-});
-
-// Route to update user profile
-app.put('/api/user/profile', authenticateToken, async (req, res) => {
-  const { name, email, companyName } = req.body;
-  try {
-    const user = await getUserByEmail(email);
-    if (user) {
-      // Update user logic here
-      res.json({ name, email, companyName });
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating user profile' });
-  }
-});
-
-// Route to get all users
 app.get('/api/users', async (req, res) => {
   try {
     const users = await getAllUsers();
@@ -119,13 +51,11 @@ app.listen(port, () => {
 const express = require('express');
 const userRoutes = require('./routes/userRoutes');
 
-// Middleware
+
 app.use(express.json());
 
-// Use user routes
 app.use('/api', userRoutes);
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
